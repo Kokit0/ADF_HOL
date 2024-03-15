@@ -1,0 +1,80 @@
+{
+	"name": "Snowflake_Product",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflake_link_service",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "CUSTOMERID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "NAMESTYLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "TITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FIRSTNAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "MIDDLENAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LASTNAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "SUFFIX",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "COMPANYNAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "SALESPERSON",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "EMAILADDRESS",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PHONE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PASSWORDHASH",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PASSWORDSALT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ROWGUID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "MODIFIEDDATE",
+				"type": "TIMESTAMP_NTZ"
+			}
+		],
+		"typeProperties": {
+			"schema": "RAW",
+			"table": "PRODUCT"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

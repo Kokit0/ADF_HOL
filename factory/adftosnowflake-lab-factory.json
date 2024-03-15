@@ -1,0 +1,9 @@
+{
+	"name": "adftosnowflake-lab-factory",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "e8ab7f10-b776-4904-abbc-2fd5c0eccab4",
+		"tenantId": "473a1db8-4112-4a10-9f40-eb252fde610a"
+	}
+}

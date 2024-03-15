@@ -1,0 +1,85 @@
+{
+	"name": "Blob_Product",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Blobadftosnowflake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Product.csv",
+				"container": "adfdemo"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "CUSTOMERID",
+				"type": "String"
+			},
+			{
+				"name": "NAMESTYLE",
+				"type": "String"
+			},
+			{
+				"name": "TITLE",
+				"type": "String"
+			},
+			{
+				"name": "FIRSTNAME",
+				"type": "String"
+			},
+			{
+				"name": "MIDDLENAME",
+				"type": "String"
+			},
+			{
+				"name": "LASTNAME",
+				"type": "String"
+			},
+			{
+				"name": "SUFFIX",
+				"type": "String"
+			},
+			{
+				"name": "COMPANYNAME",
+				"type": "String"
+			},
+			{
+				"name": "SALESPERSON",
+				"type": "String"
+			},
+			{
+				"name": "EMAILADDRESS",
+				"type": "String"
+			},
+			{
+				"name": "PHONE",
+				"type": "String"
+			},
+			{
+				"name": "PASSWORDHASH",
+				"type": "String"
+			},
+			{
+				"name": "PASSWORDSALT",
+				"type": "String"
+			},
+			{
+				"name": "ROWGUID",
+				"type": "String"
+			},
+			{
+				"name": "MODIFIEDDATE",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,158 @@
+{
+	"name": "Snowflake_SalesOrder",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "snowflake_link_service",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "SALESORDERID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "SALESORDERDETAILID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "ORDERQTY",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "PRODUCTID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "UNITPRICE",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "UNITPRICEDISCOUNT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "LINETOTAL",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "ROWGUID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "MODIFIEDDATE",
+				"type": "TIMESTAMP_NTZ"
+			},
+			{
+				"name": "REVISIONNUMBER",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "ORDERDATE",
+				"type": "TIMESTAMP_NTZ"
+			},
+			{
+				"name": "DUEDATE",
+				"type": "TIMESTAMP_NTZ"
+			},
+			{
+				"name": "SHIPDATE",
+				"type": "TIMESTAMP_NTZ"
+			},
+			{
+				"name": "STATUS",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "SALESORDERNUMBER",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PURCHASEORDERNUMBER",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ACCOUNTNUMBER",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "CUSTOMERID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "SHIPTOADDRESSID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "BILLTOADDRESSID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "SHIPMETHOD",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "CREDITCARDAPPROVALCODE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "SUBTOTAL",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "TAXAMT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "FREIGHT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "TOTALDUE",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "COMMENT",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "RAW",
+			"table": "SALESORDER"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
