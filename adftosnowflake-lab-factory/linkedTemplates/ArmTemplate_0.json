@@ -1,0 +1,1384 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adftosnowflake-lab-factory"
+		},
+		"snowflake_link_service_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"snowflake_link_service\""
+		},
+		"Blobadftosnowflake_sasUri": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"sasUri\"de \"Blobadftosnowflake\""
+		},
+		"snowflake_link_service_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "adfdemo"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Blobadftosnowflake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Azure Blob Storage del proyecto ADF to Snowflake",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('Blobadftosnowflake_sasUri')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/snowflake_link_service')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Servicio de conexión de adf a snowflake.",
+				"annotations": [],
+				"type": "SnowflakeV2",
+				"typeProperties": {
+					"authenticationType": "Basic",
+					"accountIdentifier": "ja78583.south-central-us.azure",
+					"user": "Kokke",
+					"database": "[parameters('snowflake_link_service_properties_typeProperties_database')]",
+					"warehouse": "adfdemo",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('snowflake_link_service_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_Customer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Blobadftosnowflake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Customer.csv",
+						"container": "adfdemo"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "String"
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "String"
+					},
+					{
+						"name": "TITLE",
+						"type": "String"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "String"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "String"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "String"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "String"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "String"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "String"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "String"
+					},
+					{
+						"name": "PHONE",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "String"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "String"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Blobadftosnowflake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_Product')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Blobadftosnowflake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Product.csv",
+						"container": "adfdemo"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "String"
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "String"
+					},
+					{
+						"name": "TITLE",
+						"type": "String"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "String"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "String"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "String"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "String"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "String"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "String"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "String"
+					},
+					{
+						"name": "PHONE",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "String"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "String"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Blobadftosnowflake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_ProductCategory')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Blobadftosnowflake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "ProductCategory.csv",
+						"container": "adfdemo"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "String"
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "String"
+					},
+					{
+						"name": "TITLE",
+						"type": "String"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "String"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "String"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "String"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "String"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "String"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "String"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "String"
+					},
+					{
+						"name": "PHONE",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "String"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "String"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Blobadftosnowflake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_SalesOrderDetail')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Blobadftosnowflake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "SalesOrderDetail.csv",
+						"container": "adfdemo"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "String"
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "String"
+					},
+					{
+						"name": "TITLE",
+						"type": "String"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "String"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "String"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "String"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "String"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "String"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "String"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "String"
+					},
+					{
+						"name": "PHONE",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "String"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "String"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Blobadftosnowflake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_SalesOrderHeader')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Blobadftosnowflake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "SalesOrderHeader.csv",
+						"container": "adfdemo"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "String"
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "String"
+					},
+					{
+						"name": "TITLE",
+						"type": "String"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "String"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "String"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "String"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "String"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "String"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "String"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "String"
+					},
+					{
+						"name": "PHONE",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "String"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "String"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "String"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Blobadftosnowflake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake_Customer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "snowflake_link_service",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TITLE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PHONE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "TIMESTAMP_NTZ"
+					}
+				],
+				"typeProperties": {
+					"schema": "RAW",
+					"table": "CUSTOMER"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/snowflake_link_service')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake_Product')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "snowflake_link_service",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TITLE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PHONE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "TIMESTAMP_NTZ"
+					}
+				],
+				"typeProperties": {
+					"schema": "RAW",
+					"table": "PRODUCT"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/snowflake_link_service')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake_ProductCategory')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "snowflake_link_service",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "CUSTOMERID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "NAMESTYLE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TITLE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "FIRSTNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "MIDDLENAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "LASTNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "SUFFIX",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "COMPANYNAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "SALESPERSON",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "EMAILADDRESS",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PHONE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PASSWORDHASH",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PASSWORDSALT",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "ROWGUID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "TIMESTAMP_NTZ"
+					}
+				],
+				"typeProperties": {
+					"schema": "RAW",
+					"table": "PRODUCTCATEGORY"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/snowflake_link_service')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake_SalesOrder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "snowflake_link_service",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "SALESORDERID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "SALESORDERDETAILID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "ORDERQTY",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "PRODUCTID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "UNITPRICE",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "UNITPRICEDISCOUNT",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "LINETOTAL",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "ROWGUID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "MODIFIEDDATE",
+						"type": "TIMESTAMP_NTZ"
+					},
+					{
+						"name": "REVISIONNUMBER",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "ORDERDATE",
+						"type": "TIMESTAMP_NTZ"
+					},
+					{
+						"name": "DUEDATE",
+						"type": "TIMESTAMP_NTZ"
+					},
+					{
+						"name": "SHIPDATE",
+						"type": "TIMESTAMP_NTZ"
+					},
+					{
+						"name": "STATUS",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "SALESORDERNUMBER",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PURCHASEORDERNUMBER",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "ACCOUNTNUMBER",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "CUSTOMERID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "SHIPTOADDRESSID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "BILLTOADDRESSID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "SHIPMETHOD",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "CREDITCARDAPPROVALCODE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "SUBTOTAL",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "TAXAMT",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "FREIGHT",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "TOTALDUE",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "COMMENT",
+						"type": "VARCHAR"
+					}
+				],
+				"typeProperties": {
+					"schema": "RAW",
+					"table": "SALESORDER"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/snowflake_link_service')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Blob_SalesOrderHeader",
+								"type": "DatasetReference"
+							},
+							"name": "SalesOrderHeader"
+						},
+						{
+							"dataset": {
+								"referenceName": "Blob_SalesOrderDetail",
+								"type": "DatasetReference"
+							},
+							"name": "SalesOrderDetail"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Snowflake_SalesOrder",
+								"type": "DatasetReference"
+							},
+							"name": "Snowflake"
+						}
+					],
+					"transformations": [
+						{
+							"name": "union1"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          SALESORDERID as integer,",
+						"          REVISIONNUMBER as short,",
+						"          ORDERDATE as timestamp,",
+						"          DUEDATE as timestamp,",
+						"          SHIPDATE as timestamp,",
+						"          STATUS as short,",
+						"          ONLINEORDERFLAG as boolean,",
+						"          SALESORDERNUMBER as string,",
+						"          PURCHASEORDERNUMBER as string,",
+						"          ACCOUNTNUMBER as string,",
+						"          CUSTOMERID as short,",
+						"          SHIPTOADDRESSID as short,",
+						"          BILLTOADDRESSID as short,",
+						"          SHIPMETHOD as string,",
+						"          CREDITCARDAPPROVALCODE as string,",
+						"          SUBTOTAL as integer,",
+						"          TAXAMT as short,",
+						"          FREIGHT as short,",
+						"          TOTALDUE as integer,",
+						"          COMMENT as string,",
+						"          ROWGUID as string,",
+						"          MODIFIEDDATE as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> SalesOrderHeader",
+						"source(output(",
+						"          SALESORDERID as integer,",
+						"          SALESORDERDETAILID as integer,",
+						"          ORDERQTY as short,",
+						"          PRODUCTID as short,",
+						"          UNITPRICE as short,",
+						"          UNITPRICEDISCOUNT as boolean,",
+						"          LINETOTAL as short,",
+						"          ROWGUID as string,",
+						"          MODIFIEDDATE as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> SalesOrderDetail",
+						"SalesOrderHeader, SalesOrderDetail union(byName: true)~> union1",
+						"union1 select(mapColumn(",
+						"          SALESORDERID,",
+						"          REVISIONNUMBER,",
+						"          ORDERDATE,",
+						"          DUEDATE,",
+						"          SHIPDATE,",
+						"          STATUS,",
+						"          ONLINEORDERFLAG,",
+						"          SALESORDERNUMBER,",
+						"          PURCHASEORDERNUMBER,",
+						"          ACCOUNTNUMBER,",
+						"          CUSTOMERID,",
+						"          SHIPTOADDRESSID,",
+						"          BILLTOADDRESSID,",
+						"          SHIPMETHOD,",
+						"          CREDITCARDAPPROVALCODE,",
+						"          SUBTOTAL,",
+						"          TAXAMT,",
+						"          FREIGHT,",
+						"          TOTALDUE,",
+						"          COMMENT,",
+						"          ROWGUID,",
+						"          MODIFIEDDATE,",
+						"          SALESORDERDETAILID,",
+						"          ORDERQTY,",
+						"          PRODUCTID,",
+						"          UNITPRICE,",
+						"          UNITPRICEDISCOUNT,",
+						"          LINETOTAL",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SALESORDERID as string,",
+						"          SALESORDERDETAILID as string,",
+						"          ORDERQTY as string,",
+						"          PRODUCTID as string,",
+						"          UNITPRICE as string,",
+						"          UNITPRICEDISCOUNT as string,",
+						"          LINETOTAL as string,",
+						"          ROWGUID as string,",
+						"          MODIFIEDDATE as string,",
+						"          REVISIONNUMBER as string,",
+						"          ORDERDATE as string,",
+						"          DUEDATE as string,",
+						"          SHIPDATE as string,",
+						"          STATUS as string,",
+						"          SALESORDERNUMBER as string,",
+						"          PURCHASEORDERNUMBER as string,",
+						"          ACCOUNTNUMBER as string,",
+						"          CUSTOMERID as string,",
+						"          SHIPTOADDRESSID as string,",
+						"          BILLTOADDRESSID as string,",
+						"          SHIPMETHOD as string,",
+						"          CREDITCARDAPPROVALCODE as string,",
+						"          SUBTOTAL as string,",
+						"          TAXAMT as string,",
+						"          FREIGHT as string,",
+						"          TOTALDUE as string,",
+						"          COMMENT as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     stageInsert: true,",
+						"     mapColumn(",
+						"          SALESORDERID,",
+						"          SALESORDERDETAILID,",
+						"          ORDERQTY,",
+						"          PRODUCTID,",
+						"          UNITPRICE,",
+						"          LINETOTAL,",
+						"          UNITPRICEDISCOUNT,",
+						"          ROWGUID,",
+						"          MODIFIEDDATE,",
+						"          REVISIONNUMBER,",
+						"          ORDERDATE,",
+						"          DUEDATE,",
+						"          SHIPDATE,",
+						"          STATUS,",
+						"          SALESORDERNUMBER,",
+						"          PURCHASEORDERNUMBER,",
+						"          ACCOUNTNUMBER,",
+						"          CUSTOMERID,",
+						"          SHIPTOADDRESSID,",
+						"          BILLTOADDRESSID,",
+						"          SHIPMETHOD,",
+						"          CREDITCARDAPPROVALCODE,",
+						"          SUBTOTAL,",
+						"          TAXAMT,",
+						"          FREIGHT,",
+						"          TOTALDUE,",
+						"          COMMENT,",
+						"          SALESORDERID",
+						"     )) ~> Snowflake"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Blob_SalesOrderHeader')]",
+				"[concat(variables('factoryId'), '/datasets/Blob_SalesOrderDetail')]",
+				"[concat(variables('factoryId'), '/datasets/Snowflake_SalesOrder')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake_Integration')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Pipeline desde donde controlaremos el flujo de los datos a integrar y Mover y Transformar.",
+				"activities": [
+					{
+						"name": "Customer",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "Blobadftosnowflake",
+									"type": "LinkedServiceReference"
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Blob_Customer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Snowflake_Customer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Product",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "Blobadftosnowflake",
+									"type": "LinkedServiceReference"
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Blob_Product",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Snowflake_Product",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "ProductCategory",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "Blobadftosnowflake",
+									"type": "LinkedServiceReference"
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Blob_ProductCategory",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Snowflake_ProductCategory",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Sales Order",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Customer",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Product",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "ProductCategory",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesOrderHeader": {},
+									"SalesOrderDetail": {},
+									"Snowflake": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Stored Procedure",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Sales Order",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "snowflake_link_service",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "CALL Analytics.InsertCustomerOrders();"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-03-15T19:52:35Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Blob_Customer')]",
+				"[concat(variables('factoryId'), '/datasets/Snowflake_Customer')]",
+				"[concat(variables('factoryId'), '/datasets/Blob_Product')]",
+				"[concat(variables('factoryId'), '/datasets/Snowflake_Product')]",
+				"[concat(variables('factoryId'), '/datasets/Blob_ProductCategory')]",
+				"[concat(variables('factoryId'), '/datasets/Snowflake_ProductCategory')]",
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]",
+				"[concat(variables('factoryId'), '/linkedServices/snowflake_link_service')]",
+				"[concat(variables('factoryId'), '/linkedServices/Blobadftosnowflake')]"
+			]
+		}
+	]
+}
